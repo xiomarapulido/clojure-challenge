@@ -1,4 +1,4 @@
-(ns invoice-spec
+(ns clojure-challenge.invoice-spec
   (:require
     [clojure.spec.alpha :as s]))
 

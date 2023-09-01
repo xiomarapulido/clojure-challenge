@@ -1,4 +1,4 @@
-(ns invoice-item
+(ns clojure-challenge.invoice-item
   (:gen-class))
 
 (defn- discount-factor [{:invoice-item/keys [discount-rate]

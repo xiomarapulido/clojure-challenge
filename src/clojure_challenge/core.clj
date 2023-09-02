@@ -1,7 +1,9 @@
 (ns clojure-challenge.core
-  (:require [cheshire.core :as json]
-            [clojure.java.io :as io]
-            [clojure.edn :as edn]))
+  (:require [clojure.java.io :as io]
+            [clojure.edn :as edn]
+            [clojure-challenge.invoice-spec :as invoice-spec]
+            [clojure.spec.alpha :as s]
+            [clojure.data.json :as json]))
 
 ;Exercise 1
 (def invoice (clojure.edn/read-string (slurp "invoice.edn")))
@@ -27,9 +29,13 @@
       edn/read-string))
 
 (defn map-json-to-edn [json-file edn-data]
-  (let [json-data (json/parse-string (slurp json-file) true)
-        combined-data (assoc-in edn-data [:invoice/items] (:items (:invoice json-data)))]
-    combined-data))
+  (let [json-data (json/read-str (slurp json-file) true)
+        invoice-map (assoc-in edn-data [:invoice/items] (:items (:invoice json-data)))]
+    (if (s/valid? ::invoice-spec/invoice invoice-map)
+      invoice-map
+      nil)))
+
+
 ;END Exercise 2
 
 (defn -main []
